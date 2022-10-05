@@ -1,174 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Minml dApp example</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Minimal dApp example</title>
     <script>
-        var selectedAddress;
+      var selectedAddress;
 
-        document.addEventListener('signer-change', (evt) => {
-            var addr = evt.detail;
-            selectedAddress = addr;
-            resetUI();
-            document.body.classList.add("extension-initialized");
-            displaySignerAddress(addr);
-            getContractValue(addr);
-        });
-        document.addEventListener('clear-error', clearError);
-        document.addEventListener('tx-progress', evt => {
-            document.body.classList.add("transaction-progress");
-        });
-        document.addEventListener('dapp-connected', evt => {
-            document.body.classList.add("connected");
-        });
-        document.addEventListener('tx-complete', evt => {
-            document.body.classList.remove("transaction-progress");
-        });
-        document.addEventListener('display-error', (evt => {
-            displayError(evt.detail);
-        }));
-        document.addEventListener('balance-value', (evt => {
-            document.body.getElementsByClassName('reef-balance')[0].innerHTML = '<span style="font-weight:bold">Balance:</span> ' + evt.detail + ' REEF';
-        }));
-        document.addEventListener('evm-connected', () => document.body.classList.add("evm-connected"));
-        document.addEventListener('contract-value', (evt => {
-            document.getElementsByClassName('contract-value')[0].innerHTML = 'Contract value = ' + evt.detail;
-        }));
+      document.addEventListener("signer-change", (evt) => {
+        var addr = evt.detail;
+        selectedAddress = addr;
+        resetUI();
+        document.body.classList.add("extension-initialized");
+        displaySignerAddress(addr);
+        getContractValue(addr);
+      });
+      document.addEventListener("clear-error", clearError);
+      document.addEventListener("tx-progress", (evt) => {
+        document.body.classList.add("transaction-progress");
+      });
+      document.addEventListener("dapp-connected", (evt) => {
+        document.body.classList.add("connected");
+      });
+      document.addEventListener("tx-complete", (evt) => {
+        document.body.classList.remove("transaction-progress");
+      });
+      document.addEventListener("display-error", (evt) => {
+        displayError(evt.detail);
+      });
+      document.addEventListener("balance-value", (evt) => {
+        document.body.getElementsByClassName("reef-balance")[0].innerHTML =
+          '<span style="font-weight:bold">Balance:</span> ' +
+          evt.detail +
+          " REEF";
+      });
+      document.addEventListener("evm-connected", () =>
+        document.body.classList.add("evm-connected")
+      );
+      document.addEventListener("contract-value", (evt) => {
+        document.getElementsByClassName("contract-value")[0].innerHTML =
+          "Contract value = " + evt.detail;
+      });
 
-        function bindEvm(addr) {
-            document.dispatchEvent(new CustomEvent('bind-evm-address', { detail: addr }));
-        }
+      function bindEvm(addr) {
+        document.dispatchEvent(
+          new CustomEvent("bind-evm-address", { detail: addr })
+        );
+      }
 
-        function getContractValue(addr) {
-            document.dispatchEvent(new CustomEvent('get-contract-value', { detail: addr }));
-        }
+      function getContractValue(addr) {
+        document.dispatchEvent(
+          new CustomEvent("get-contract-value", { detail: addr })
+        );
+      }
 
-        function toggleContractValue(addr) {
-            document.dispatchEvent(new CustomEvent('toggle-contract-value', { detail: addr }));
-        }
+      function toggleContractValue(addr) {
+        document.dispatchEvent(
+          new CustomEvent("toggle-contract-value", { detail: addr })
+        );
+      }
 
-        function displayError(e) {
-            resetUI();
-            document.body.classList.add("reef-extension-error");
-            document.getElementsByClassName('error-msg')[0].innerHTML = e.message || e;
-        }
+      function displayError(e) {
+        resetUI();
+        document.body.classList.add("reef-extension-error");
+        document.getElementsByClassName("error-msg")[0].innerHTML =
+          e.message || e;
+      }
 
-        function clearError() {
-            document.body.classList.remove("reef-extension-error");
-            document.getElementsByClassName('error-msg')[0].innerHTML = '';
-        }
+      function clearError() {
+        document.body.classList.remove("reef-extension-error");
+        document.getElementsByClassName("error-msg")[0].innerHTML = "";
+      }
 
-        async function displaySignerAddress(addr) {
-            document.body.getElementsByClassName('selected-signer')[0].innerHTML = '<span style="font-weight:bold">Selected address:</span> ' + addr;
-        }
+      async function displaySignerAddress(addr) {
+        document.body.getElementsByClassName("selected-signer")[0].innerHTML =
+          '<span style="font-weight:bold">Selected address:</span> ' + addr;
+      }
 
-        async function resetUI() {
-            document.body.classList.remove("evm-connected");
-            document.body.classList.remove("connected");
-            document.body.classList.remove("reef-extension-error");
-            document.getElementsByClassName('contract-value')[0].innerHTML = '';
-            document.getElementsByClassName('selected-signer')[0].innerHTML = '';
-            document.getElementsByClassName('reef-balance')[0].innerHTML = '';
-            clearError();
-        }
+      async function resetUI() {
+        document.body.classList.remove("evm-connected");
+        document.body.classList.remove("connected");
+        document.body.classList.remove("reef-extension-error");
+        document.getElementsByClassName("contract-value")[0].innerHTML = "";
+        document.getElementsByClassName("selected-signer")[0].innerHTML = "";
+        document.getElementsByClassName("reef-balance")[0].innerHTML = "";
+        clearError();
+      }
     </script>
     <script src="js/index.js"></script>
     <style>
-        .content {
-            display: none;
-        }
+      .content {
+        display: none;
+      }
 
-        .extension-initialized.connected .content {
-            display: block;
-        }
+      .extension-initialized.connected .content {
+        display: block;
+      }
 
-        .extension-initialized .connecting {
-            display: none;
-        }
+      .extension-initialized .connecting {
+        display: none;
+      }
 
-        .error-display {
-            display: none;
-        }
+      .error-display {
+        display: none;
+      }
 
-        .reef-extension-error .error-display {
-            display: block;
-        }
+      .reef-extension-error .error-display {
+        display: block;
+      }
 
-        .content {
-            display: none;
-        }
+      .content {
+        display: none;
+      }
 
-        code {
-            background-color: #ECEFF1;
-        }
+      code {
+        background-color: #eceff1;
+      }
 
-        .evm-contract-calls {
-            display: none;
-        }
+      .evm-contract-calls {
+        display: none;
+      }
 
-        .evm-connected .evm-contract-calls {
-            display: block;
-        }
+      .evm-connected .evm-contract-calls {
+        display: block;
+      }
 
-        .evm-connected .bind-evm {
-            display: none;
-        }
+      .evm-connected .bind-evm {
+        display: none;
+      }
 
-        .transaction-progress .bind-start {
-            display: none;
-        }
+      .transaction-progress .bind-start {
+        display: none;
+      }
 
-        .transaction-progress-display {
-            display: none;
-        }
+      .transaction-progress-display {
+        display: none;
+      }
 
-        .transaction-progress .transaction-progress-display {
-            display: block;
-        }
+      .transaction-progress .transaction-progress-display {
+        display: block;
+      }
 
-        .transaction-progress .tx-btns {
-            display: none;
-        }
+      .transaction-progress .tx-btns {
+        display: none;
+      }
 
-        .tx-btns {
-            display: block;
-        }
+      .tx-btns {
+        display: block;
+      }
     </style>
-</head>
-<body>
-<h3>Minml dApp</h3>
-<div class="connecting">
-    <p>Connecting to chain, please wait ...</p>
-</div>
-<div class="selected-signer"></div>
-<div class="reef-balance"></div>
-<div class="content">
-    <div class="bind-evm">
-        <div class="bind-start">
-            <p>Enough balance to enable EVM contracts for account</p>
-            <button type="button" onclick="bindEvm(selectedAddress)">Connect EVM layer</button>
-        </div>
+  </head>
+  <body>
+    <h3>Minimal dApp</h3>
+    <div class="connecting">
+      <p>Connecting to chain, please wait ...</p>
     </div>
-    <div class="evm-contract-calls">
+    <div class="selected-signer"></div>
+    <div class="reef-balance"></div>
+    <div class="content">
+      <div class="bind-evm">
+        <div class="bind-start">
+          <p>Enough balance to enable EVM contracts for account</p>
+          <button type="button" onclick="bindEvm(selectedAddress)">
+            Connect EVM layer
+          </button>
+        </div>
+      </div>
+      <div class="evm-contract-calls">
         <div>
-            <h3 class="contract-value"></h3>
-            <small>Note: contract value is not account specific so others can flip it as well.</small>
+          <h3 class="contract-value"></h3>
+          <small
+            >Note: contract value is not account specific so others can flip it
+            as well.</small
+          >
         </div>
         <div class="tx-btns">
-            <button type="button" onclick="getContractValue(selectedAddress)">get contract value</button>
-            <button type="button" onclick="toggleContractValue(selectedAddress)">toggle contract value</button>
+          <button type="button" onclick="getContractValue(selectedAddress)">
+            get contract value
+          </button>
+          <button type="button" onclick="toggleContractValue(selectedAddress)">
+            toggle contract value
+          </button>
         </div>
-    </div>
-    <div class="transaction-progress-display">
+      </div>
+      <div class="transaction-progress-display">
         <p>Transaction in progress ...</p>
-    </div>
-    <div class="transaction-progress-display">
+      </div>
+      <div class="transaction-progress-display">
         <p>Transaction in progress ...</p>
+      </div>
     </div>
-</div>
-<div class="error-display">
-    <h3>ERROR</h3>
-    <div class="error-msg"></div>
-</div>
-</body>
+    <div class="error-display">
+      <h3>ERROR</h3>
+      <div class="error-msg"></div>
+    </div>
+  </body>
 </html>
